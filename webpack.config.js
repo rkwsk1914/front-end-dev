@@ -3,6 +3,8 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 const ESLintPlugin = require('eslint-webpack-plugin')
+const GasPlugin = require('gas-webpack-plugin')
+const Es3ifyPlugin = require('es3ify-webpack-plugin')
 
 module.exports = (env) => {
   const MODE = /development|production/.test(env.mode) ? env.mode : 'production' // 'production' か 'development' を指定
@@ -155,7 +157,9 @@ module.exports = (env) => {
         fix: true,
         failOnError: true,
         quiet: true
-      })
+      }),
+      new GasPlugin(),
+      new Es3ifyPlugin()
     ],
     optimization: {
       minimize: true,
