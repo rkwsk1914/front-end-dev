@@ -6,8 +6,9 @@ const ESLintPlugin = require('eslint-webpack-plugin')
 const GasPlugin = require('gas-webpack-plugin')
 const Es3ifyPlugin = require('es3ify-webpack-plugin')
 
-module.exports = (env) => {
-  const MODE = /development|production/.test(env.mode) ? env.mode : 'production' // 'production' か 'development' を指定
+module.exports = (env, argument) => {
+  const MODE = /development|production/.test(argument.mode) ? argument.mode : 'production' // 'production' か 'development' を指定
+  console.log(MODE)
   const enabledSourceMap = MODE === 'production' ? true : false // ソースマップの利用有無(productionのときはソースマップを利用しない)
   const browserslist = [
     "IE 11",
@@ -43,7 +44,7 @@ module.exports = (env) => {
 
   const CONFIG = {
     mode: MODE,
-    entry: './src/test/main.react.tsx',
+    entry: './src/main.js',
     output: {
       path: `${__dirname}/dist`, //  出力ファイルのディレクトリ名
       filename: 'main.js' // 出力ファイル名
@@ -148,10 +149,10 @@ module.exports = (env) => {
       extensions: ['*', '.ts', '.js', '.tsx', '.jsx', '.vue', '.json'], // 拡張子を配列で指定
     },
     plugins: [
-      new VueLoaderPlugin(), // Vueを読み込めるようにするため
       new MiniCssExtractPlugin({
         filename: "dist/style.css",
       }),
+      new VueLoaderPlugin(), // Vueを読み込めるようにするため
       new ESLintPlugin({
         extensions: ['.ts', '.js', '.tsx', '.jsx', '.vue'],
         fix: true,
