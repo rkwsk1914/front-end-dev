@@ -1,28 +1,13 @@
 const TerserPlugin = require('terser-webpack-plugin')
 const ESLintPlugin = require('eslint-webpack-plugin')
 const GasPlugin = require('gas-webpack-plugin')
-const Es3ifyPlugin = require('es3ify-webpack-plugin')
+// const Es3ifyPlugin = require('es3ify-webpack-plugin')
 
 module.exports = (env, argument) => {
   console.log(env)
-  console.log(argument.mode)
+  console.log(argument)
   const MODE = /development|production/.test(argument.mode) ? argument.mode : 'production' // 'production' か 'development' を指定
-  console.log(MODE)
-  const enabledSourceMap = MODE === 'production' ? true : false // ソースマップの利用有無(productionのときはソースマップを利用しない)
-  const browserslist = [
-    "IE 11",
-    "ios >= 8",
-    "edge >= 16",
-    "safari >= 9",
-    "firefox >= 57",
-    "chrome >= 49",
-    "android >= 4.2"
-  ]
-
-  const eslintrc = {
-    fix: true, //fix： autofixモードを有効化（できるだけ多くの問題を修復）
-    failOnError: true //ESLintによるエラー検出時にはビルドを中断
-  }
+  // const enabledSourceMap = MODE === 'production' // ソースマップの利用有無(productionのときはソースマップを利用しない)
 
   const CONFIG = {
     mode: MODE,
@@ -39,7 +24,7 @@ module.exports = (env, argument) => {
             {
               loader: 'babel-loader'
             }
-          ],
+          ]
         },
         { // 拡張子 .ts もしくは .tsx の場合
           test: /\.tsx?$/,
@@ -49,7 +34,7 @@ module.exports = (env, argument) => {
             },
             'ts-loader' // TypeScript をコンパイルする
           ]
-        },
+        }
       ]
     },
     // import 文で .ts ファイルを解決するため
@@ -61,7 +46,13 @@ module.exports = (env, argument) => {
     },
     plugins: [
       new GasPlugin(),
-      new Es3ifyPlugin()
+      // new Es3ifyPlugin(),
+      new ESLintPlugin({
+        extensions: ['.ts', '.js'],
+        fix: true,
+        failOnError: true,
+        quiet: true
+      })
     ],
     optimization: {
       minimize: true,
@@ -69,8 +60,8 @@ module.exports = (env, argument) => {
         new TerserPlugin({
           extractComments: false,
           terserOptions: {
-            output: { comments: MODE === "production" ? false : true },
-            compress: { drop_console: MODE === "production" ? true : false }
+            output: { comments: MODE !== 'production' },
+            compress: { drop_console: MODE === 'production' }
           }
         })
       ]
