@@ -5,8 +5,11 @@
   "main": "index.js",
   "scripts": {
     "build": "webpack",
-    "dev": "webpack --config webpack.config.gas.js --mode=development",
-    "watch": "webpack --watch"
+    "dev": "webpack --mode=development",
+    "watch": "webpack --watch --mode=development",
+    "gas": "webpack --config webpack.config.gas.js",
+    "gas-d": "webpack --config webpack.config.gas.js --mode=development",
+    "gas-w": "webpack --watch --config webpack.config.gas.js --mode=development"
   },
   "author": "",
   "license": "ISC",
